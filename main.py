@@ -28,18 +28,16 @@ def ejecutar_scraping_estatico():
             print("Petición exitosa con BeautifulSoup")
             soup = BeautifulSoup(response.content, "html.parser")
 
-            # Extraemos el título y el precio usando tus selectores originales
+            # Extraemos el título y el precio de forma segura
             title_element = soup.find("span", id="productTitle")
             titulo_bs = title_element.get_text(strip=True) if title_element else "No encontrado"
 
             price_element = soup.find("span", class_="a-offscreen")
-            precio_bs = price_element.get_text(strip=True) if precio_bs else "No disponible"
+            precio_bs = price_element.get_text(strip=True) if price_element else "No disponible"
 
             estado_bs = "Exitoso"
         else:
             print(f"Aviso: La página respondió con el código HTTP: {response.status_code}")
-            # Nota: Si Amazon bloquea temporalmente la IP del servidor de pruebas con un captcha,
-            # el script no debe romper el pipeline de CI/CD, por lo que permitimos flujo controlado.
             estado_bs = "Bloqueado o Restringido"
 
     except Exception as e:
